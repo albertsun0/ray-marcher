@@ -133,13 +133,11 @@ export class GUI implements IGUI {
       console.log(dx);
       console.log(dy);
       let t:Vec3 = this.camera.pos().add(this.camera.forward());
-      this.camera.rotate(new Vec3([0.0,1.0,0.0]), dx * GUI.rotationSpeed, new Vec3([0,0,0]));
+      this.camera.rotate(new Vec3([0.0,1.0,0.0]), -dx * GUI.rotationSpeed);
+      this.camera.rotate(new Vec3([1.0,0.0,0.0]), dy * GUI.rotationSpeed);
       this.prevX = curX;
       this.prevY = curY;
     }
-	  
-	  // TODO: Your code here for left and right mouse drag
-	  
   }
 
   /**
@@ -176,7 +174,7 @@ export class GUI implements IGUI {
         break;
       }
       case "KeyA": {
-        let temp: Vec3 = this.camera.pos().add(this.camera.right().scale(GUI.panSpeed));
+        let temp: Vec3 = this.camera.pos().add(this.camera.right().scale(-GUI.panSpeed));
         this.camera.setPos(temp);
         break;
       }
@@ -186,7 +184,8 @@ export class GUI implements IGUI {
         break;
       }
       case "KeyD": {
-        let temp: Vec3 = this.camera.pos().add(this.camera.right().scale(-GUI.panSpeed));
+        console.log("d");
+        let temp: Vec3 = this.camera.pos().add(this.camera.right().scale(GUI.panSpeed));
         this.camera.setPos(temp); 
         break;
       }
@@ -204,16 +203,16 @@ export class GUI implements IGUI {
       }
       case "ArrowUp": {
         // let temp: Vec3 = this.camera.pos().add(this.camera.up().scale(GUI.panSpeed));
-        this.camera.rotate(new Vec3([1.0,0.0,0.0]), GUI.panSpeed, new Vec3([0,0,0]));
-
+        let temp: Vec3 = this.camera.pos().add(this.camera.up().scale(GUI.zoomSpeed));
+        this.camera.setPos(temp);
         // this.camera.setPos(temp);
         break;
       }
       case "ArrowDown": {
         // let temp: Vec3 = this.camera.pos().add(this.camera.up().scale(-GUI.panSpeed));
         // this.camera.setPos(temp);
-        this.camera.rotate(new Vec3([1.0,0.0,0.0]), GUI.panSpeed, new Vec3([0,0,0]));
-
+        let temp: Vec3 = this.camera.pos().add(this.camera.up().scale(-GUI.zoomSpeed));
+        this.camera.setPos(temp);
         break;
       }
       case "Digit1": {

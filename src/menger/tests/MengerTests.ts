@@ -152,6 +152,7 @@ mengerTests.integrationTest(
   (animation) => {
     animation.reset();
     pressKey(window, "Digit2", 1);
+    //dragMouse(canvas, -1, -1, );
     dragMouse(canvas, -1, -1, 10);
     animation.draw();
   }
