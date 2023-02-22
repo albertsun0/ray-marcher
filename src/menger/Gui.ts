@@ -133,8 +133,8 @@ export class GUI implements IGUI {
       console.log(dx);
       console.log(dy);
       let t:Vec3 = this.camera.pos().add(this.camera.forward());
-      this.camera.rotate(new Vec3([0.0,1.0,0.0]), -dx * GUI.rotationSpeed);
-      this.camera.rotate(new Vec3([1.0,0.0,0.0]), dy * GUI.rotationSpeed);
+      this.camera.rotate(new Vec3([dx, -dy,0.0]), GUI.rotationSpeed);
+      //this.camera.rotate(new Vec3([1.0,0.0,0.0]), dy * GUI.rotationSpeed);
       this.prevX = curX;
       this.prevY = curY;
     }
