@@ -118,13 +118,12 @@ export class MengerSponge implements IMengerSponge {
             let index = z + x * 3 + y * 9;
             if(this.removeIndex.indexOf(index) == -1){
               //console.log(index);
-              console.log(start);
+              //console.log(start);
               let newStart = [...start];
               //console.log(width/3)
               newStart[0] += x * width/3;
-              newStart[2] += -z * width/3;
-              newStart[1] -= y * width/3;
-
+              newStart[2] += z * width/3;
+              newStart[1] += y * width/3;
               this.gen(newStart, width/3, level - 1);
             }
           }
