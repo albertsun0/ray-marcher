@@ -125,15 +125,19 @@ export class GUI implements IGUI {
    * @param mouse
    */
   public drag(mouse: MouseEvent): void {
-	  let curX:number = mouse.screenX;
-    let curY:number = mouse.screenY;
-    let dx:number = mouse.screenX - this.prevX;
-    let dy:number = mouse.screenY - this.prevY;
-    console.log(dx);
-    console.log(dy);
-    
-    this.prevX = curX;
-    this.prevY = curY;
+    if(this.dragging){
+      let curX:number = mouse.screenX;
+      let curY:number = mouse.screenY;
+      let dx:number = mouse.screenX - this.prevX;
+      let dy:number = mouse.screenY - this.prevY;
+      console.log(dx);
+      console.log(dy);
+      let t:Vec3 = this.camera.pos().add(this.camera.forward());
+      this.camera.rotate(new Vec3([0.0,1.0,0.0]), dx * GUI.rotationSpeed, new Vec3([0,0,0]));
+      this.prevX = curX;
+      this.prevY = curY;
+    }
+	  
 	  // TODO: Your code here for left and right mouse drag
 	  
   }
