@@ -2,7 +2,6 @@ import { Camera } from "../lib/webglutils/Camera.js";
 import { CanvasAnimation } from "../lib/webglutils/CanvasAnimation.js";
 import { MengerSponge } from "./MengerSponge.js";
 import { Mat4, Vec3 } from "../lib/TSM.js";
-
 /**
  * Might be useful for designing any animation GUI
  */
@@ -164,8 +163,10 @@ export class GUI implements IGUI {
 
 	// TOOD: Your code for key handling
 
+
     switch (key.code) {
       case "KeyW": {
+        console.log("w")
         let temp: Vec3 = this.camera.pos().add(this.camera.forward().scale(-GUI.zoomSpeed));
         this.camera.setPos(temp);
         break;
@@ -182,7 +183,7 @@ export class GUI implements IGUI {
       }
       case "KeyD": {
         let temp: Vec3 = this.camera.pos().add(this.camera.right().scale(-GUI.panSpeed));
-        this.camera.setPos(temp);
+        this.camera.setPos(temp); 
         break;
       }
       case "KeyR": {
@@ -190,18 +191,24 @@ export class GUI implements IGUI {
         break;
       }
       case "ArrowLeft": {
-
+        this.camera.rotate(this.camera.forward(), GUI.rollSpeed, this.camera.pos())
         break;
       }
       case "ArrowRight": {
-
+        this.camera.rotate(this.camera.forward(), -GUI.rollSpeed, this.camera.pos())
         break;
       }
       case "ArrowUp": {
+        // let temp: Vec3 = this.camera.pos().add(this.camera.up().scale(GUI.panSpeed));
+        this.camera.rotate(new Vec3([1.0,0.0,0.0]), GUI.panSpeed, new Vec3([0,0,0]));
 
+        // this.camera.setPos(temp);
         break;
       }
       case "ArrowDown": {
+        // let temp: Vec3 = this.camera.pos().add(this.camera.up().scale(-GUI.panSpeed));
+        // this.camera.setPos(temp);
+        this.camera.rotate(new Vec3([1.0,0.0,0.0]), GUI.panSpeed, new Vec3([0,0,0]));
 
         break;
       }
