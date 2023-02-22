@@ -31,11 +31,19 @@ export let defaultFSText = `
     precision mediump float;
 
     varying vec4 lightDir;
-    varying vec4 normal;    
+    varying vec4 normal;  
 	
     
     void main () {
-        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        if(abs(normal.z) > 0.5){
+            gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+        }
+        else if(abs(normal.y) > 0.5){
+            gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+        }
+        else{
+            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        }
     }
 `;
 
