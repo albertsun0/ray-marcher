@@ -20,7 +20,8 @@ export class MengerSponge implements IMengerSponge {
   indices : number[] = [];
   normals : number[] = [];
 
-
+  //cube verticies and trianges adapted from 
+  //http://ilkinulas.github.io/development/unity/2016/04/30/cube-mesh-in-unity3d.html
   cubeVertices: Vec3[] = [
     new Vec3([0, 0, 0]),
     new Vec3([1, 0, 0]),
@@ -47,6 +48,7 @@ export class MengerSponge implements IMengerSponge {
     0, 1, 6
   ];
 
+  //index of squares to remove from cube
   removeIndex:number[] = [4,10,12,13,14,16,22];
 
   constructor(level: number) {
@@ -72,20 +74,28 @@ export class MengerSponge implements IMengerSponge {
     this.normals = [];
     this.gen([-0.5,-0.5,-0.5], 1, level);
   }
-
+  
+  //draw a cube from start [x,y,z] with width/height of width
+  //remember right hand rule
+  // looking at right hand, +x is thumb / left
+  // index finger is +y / up
+  // middle finger pointing forwards is +z / towards you / backwards
   private drawCube(start:number[], width:number){
-      //translate cube verticies
-      //translate cube triangles
       let verticiesix = this.vertices.length/4;
+      //push all 8 vertices with offset
       for(let i = 0; i < 8; i++){
-        this.vertices.push(this.cubeVertices[i].x * width + start[0], this.cubeVertices[i].y * width + start[1], this.cubeVertices[i].z * width + start[2], 1);
+        this.vertices.push(this.cubeVertices[i].x * width + start[0], 
+                          this.cubeVertices[i].y * width + start[1], 
+                          this.cubeVertices[i].z * width + start[2], 
+                          1);
       }
+      //push all triangles
       for(let i = 0; i < 12 * 3; i++){
         this.indices.push(this.cubeTraingles[i] + verticiesix);
         //set normals
       }
 
-      // //front
+      //normals, not sure if correct
       this.normals.push(0,0,1,0);
       this.normals.push(0,0,1,0);
       //top
@@ -105,9 +115,10 @@ export class MengerSponge implements IMengerSponge {
       this.normals.push(0,-1,0,0);
   }
 
+  //recursively split the current cube into 27 smaller cubes, removing the middles
   private gen(start:number[], width:number, level:number):void{
     if(level <= 1){
-      //add cube based on start and width ??
+      //add cube
       this.drawCube(start, width);
       return;
     }
@@ -116,14 +127,16 @@ export class MengerSponge implements IMengerSponge {
         for(let x = 0; x < 3; x++){
           for(let z = 0; z < 3; z++){
             let index = z + x * 3 + y * 9;
+            //loop through all 27 cubes, from bottom to top
+            //if cube is in remove list, dont draw it
             if(this.removeIndex.indexOf(index) == -1){
-              //console.log(index);
-              //console.log(start);
+              //copy starting point
               let newStart = [...start];
-              //console.log(width/3)
+              //translate starting point to starting point of smaller cube
               newStart[0] += x * width/3;
               newStart[2] += z * width/3;
               newStart[1] += y * width/3;
+              //generate smaller cube
               this.gen(newStart, width/3, level - 1);
             }
           }
@@ -137,44 +150,6 @@ export class MengerSponge implements IMengerSponge {
   public positionsFlat(): Float32Array {
 	  // TODO: right now this makes a single triangle. Make the cube fractal instead.
 	  return new Float32Array(this.vertices);
-    return new Float32Array([
-      -1.0,-1.0,-1.0, 1.0, // triangle 1 : begin
-      -1.0,-1.0, 1.0, 1.0,
-      -1.0, 1.0, 1.0, 1.0, // triangle 1 : end
-      1.0, 1.0,-1.0, 1.0, // triangle 2 : begin
-      -1.0,-1.0,-1.0, 1.0,
-      -1.0, 1.0,-1.0, 1.0, // triangle 2 : end
-      1.0,-1.0, 1.0, 1.0,
-      -1.0,-1.0,-1.0, 1.0,
-      1.0,-1.0,-1.0, 1.0,
-      1.0, 1.0,-1.0, 1.0,
-      1.0,-1.0,-1.0, 1.0,
-      -1.0,-1.0,-1.0, 1.0,
-      -1.0,-1.0,-1.0, 1.0,
-      -1.0, 1.0, 1.0, 1.0,
-      -1.0, 1.0,-1.0, 1.0,
-      1.0,-1.0, 1.0, 1.0,
-      -1.0,-1.0, 1.0, 1.0,
-      -1.0,-1.0,-1.0, 1.0,
-      -1.0, 1.0, 1.0, 1.0,
-      -1.0,-1.0, 1.0, 1.0,
-      1.0,-1.0, 1.0, 1.0,
-      1.0, 1.0, 1.0, 1.0,
-      1.0,-1.0,-1.0, 1.0,
-      1.0, 1.0,-1.0, 1.0,
-      1.0,-1.0,-1.0, 1.0,
-      1.0, 1.0, 1.0, 1.0,
-      1.0,-1.0, 1.0, 1.0,
-      1.0, 1.0, 1.0, 1.0,
-      1.0, 1.0,-1.0, 1.0,
-      -1.0, 1.0,-1.0, 1.0,
-      1.0, 1.0, 1.0, 1.0,
-      -1.0, 1.0,-1.0, 1.0,
-      -1.0, 1.0, 1.0, 1.0,
-      1.0, 1.0, 1.0, 1.0,
-      -1.0, 1.0, 1.0, 1.0,
-      1.0,-1.0, 1.0, 1.0,
-  ])
   }
 
   /**
@@ -183,11 +158,6 @@ export class MengerSponge implements IMengerSponge {
   public indicesFlat(): Uint32Array {
     // TODO: right now this makes a single triangle. Make the cube fractal instead.
     return new Uint32Array(this.indices);
-    let temp :number[] = [];
-    for(let i = 0; i < 12*3; i++){
-      temp.push(i);
-    }
-    return new Uint32Array(temp);
   }
 
   /**

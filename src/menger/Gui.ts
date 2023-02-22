@@ -69,7 +69,7 @@ export class GUI implements IGUI {
     this.dragging = false;
     /* Create camera setup */
     this.camera = new Camera(
-      new Vec3([2, 2, -6]),
+      new Vec3([0, 0, -6]),
       new Vec3([0, 0, 0]),
       new Vec3([0, 1, 0]),
       45,
@@ -126,7 +126,15 @@ export class GUI implements IGUI {
    * @param mouse
    */
   public drag(mouse: MouseEvent): void {
-	  
+	  let curX:number = mouse.screenX;
+    let curY:number = mouse.screenY;
+    let dx:number = mouse.screenX - this.prevX;
+    let dy:number = mouse.screenY - this.prevY;
+    console.log(dx);
+    console.log(dy);
+    
+    this.prevX = curX;
+    this.prevY = curY;
 	  // TODO: Your code here for left and right mouse drag
 	  
   }
@@ -158,19 +166,23 @@ export class GUI implements IGUI {
 
     switch (key.code) {
       case "KeyW": {
-
+        let temp: Vec3 = this.camera.pos().add(this.camera.forward().scale(-GUI.zoomSpeed));
+        this.camera.setPos(temp);
         break;
       }
       case "KeyA": {
-
+        let temp: Vec3 = this.camera.pos().add(this.camera.right().scale(GUI.panSpeed));
+        this.camera.setPos(temp);
         break;
       }
       case "KeyS": {
-
+        let temp: Vec3 = this.camera.pos().add(this.camera.forward().scale(GUI.zoomSpeed));
+        this.camera.setPos(temp);
         break;
       }
       case "KeyD": {
-
+        let temp: Vec3 = this.camera.pos().add(this.camera.right().scale(-GUI.panSpeed));
+        this.camera.setPos(temp);
         break;
       }
       case "KeyR": {
