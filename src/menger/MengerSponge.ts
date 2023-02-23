@@ -68,6 +68,11 @@ export class MengerSponge implements IMengerSponge {
   removeIndex:number[] = [4,10,12,13,14,16,22];
 
   constructor(level: number) {
+    for(let i = 0; i < this.cubeVertices.length; i++){
+      this.cubeVertices[i].x = (this.cubeVertices[i].x + 1)/2;
+      this.cubeVertices[i].y = (this.cubeVertices[i].y + 1)/2;
+      this.cubeVertices[i].z = (this.cubeVertices[i].z + 1)/2;
+    }
 	  this.setLevel(level);
 	  // TODO: other initialization	
   }
@@ -90,6 +95,8 @@ export class MengerSponge implements IMengerSponge {
     this.indices = [];
     this.normals = [];
     this.gen([-0.5,-0.5,-0.5], 1, level);
+    console.log(this.indices);
+    console.log(this.vertices);
     this.dirty = true;
   }
   
@@ -112,24 +119,54 @@ export class MengerSponge implements IMengerSponge {
         this.indices.push(verticesix + i);
       }
 
-      //normals, not sure if correct
-      this.normals.push(0,0,1,0);
-      this.normals.push(0,0,1,0);
-      //top
-      this.normals.push(0,1,0,0);
-      this.normals.push(0,1,0,0);
-      //right
       this.normals.push(1,0,0,0);
       this.normals.push(1,0,0,0);
-      //left
-      this.normals.push(-1,0,0,0);
-      this.normals.push(-1,0,0,0);
-      //back
-      this.normals.push(0,0,-1,0);
-      this.normals.push(0,0,-1,0);
-      //bottom
+      this.normals.push(1,0,0,0);
+
+      this.normals.push(0,0,1,0);
+      this.normals.push(0,0,1,0);
+      this.normals.push(0,0,1,0);
+
       this.normals.push(0,-1,0,0);
       this.normals.push(0,-1,0,0);
+      this.normals.push(0,-1,0,0);
+
+      this.normals.push(0,0,1,0);
+      this.normals.push(0,0,1,0);
+      this.normals.push(0,0,1,0);
+
+      this.normals.push(1,0,0,0);
+      this.normals.push(1,0,0,0);
+      this.normals.push(1,0,0,0);
+      
+      this.normals.push(0,-1,0,0);
+      this.normals.push(0,-1,0,0);
+      this.normals.push(0,-1,0,0);
+      
+      this.normals.push(0,0,-1,0);
+      this.normals.push(0,0,-1,0);
+      this.normals.push(0,0,-1,0);
+
+      this.normals.push(-1,0,0,0);
+      this.normals.push(-1,0,0,0);
+      this.normals.push(-1,0,0,0);
+
+      this.normals.push(-1,0,0,0);
+      this.normals.push(-1,0,0,0);
+      this.normals.push(-1,0,0,0);
+      
+      this.normals.push(0,-1,0,0);
+      this.normals.push(0,-1,0,0);
+      this.normals.push(0,-1,0,0);
+
+      this.normals.push(0,-1,0,0);
+      this.normals.push(0,-1,0,0);
+      this.normals.push(0,-1,0,0);
+
+      this.normals.push(0,0,-1,0);
+      this.normals.push(0,0,-1,0);
+      this.normals.push(0,0,-1,0);
+      
   }
 
   //recursively split the current cube into 27 smaller cubes, removing the middles
