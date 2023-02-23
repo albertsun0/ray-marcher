@@ -155,13 +155,13 @@ export class MengerSponge implements IMengerSponge {
       this.normals.push(-1,0,0,0);
       this.normals.push(-1,0,0,0);
       
-      this.normals.push(0,-1,0,0);
-      this.normals.push(0,-1,0,0);
-      this.normals.push(0,-1,0,0);
+      this.normals.push(0,1,0,0);
+      this.normals.push(0,1,0,0);
+      this.normals.push(0,1,0,0);
 
-      this.normals.push(0,-1,0,0);
-      this.normals.push(0,-1,0,0);
-      this.normals.push(0,-1,0,0);
+      this.normals.push(0,1,0,0);
+      this.normals.push(0,1,0,0);
+      this.normals.push(0,1,0,0);
 
       this.normals.push(0,0,-1,0);
       this.normals.push(0,0,-1,0);
