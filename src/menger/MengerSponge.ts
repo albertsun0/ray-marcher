@@ -19,6 +19,8 @@ export class MengerSponge implements IMengerSponge {
   vertices : number[] = [];
   indices : number[] = [];
   normals : number[] = [];
+  
+  dirty : boolean = true;
 
   //cube verticies and trianges adapted from 
   //http://ilkinulas.github.io/development/unity/2016/04/30/cube-mesh-in-unity3d.html
@@ -60,10 +62,11 @@ export class MengerSponge implements IMengerSponge {
    * Returns true if the sponge has changed.
    */
   public isDirty(): boolean {
-       return true;
+       return this.dirty;
   }
 
   public setClean(): void {
+    this.dirty = false;
   }
   
   public setLevel(level: number)
@@ -73,6 +76,7 @@ export class MengerSponge implements IMengerSponge {
     this.indices = [];
     this.normals = [];
     this.gen([-0.5,-0.5,-0.5], 1, level);
+    this.dirty = true;
   }
   
   //draw a cube from start [x,y,z] with width/height of width
