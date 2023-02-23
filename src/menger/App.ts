@@ -220,8 +220,8 @@ export class MengerAnimation extends CanvasAnimation {
     /* Compile Shaders */
     this.floorProgram = WebGLUtilities.createProgram(
       gl,
-      defaultVSText,
-      defaultFSText
+      floorVSText,
+      floorFSText
     );
     gl.useProgram(this.floorProgram);
 
