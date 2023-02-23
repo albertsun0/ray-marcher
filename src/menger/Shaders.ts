@@ -36,6 +36,7 @@ export let defaultFSText = `
     void main () {
         vec4 n = normalize(normal);
         gl_FragColor = vec4(n.x, n.y, n.z, 1.0);
+        gl_FragColor = vec4(1.0,0.0,0.0,1.0);
         // if(abs(normal.z) > 0.5){
         //     gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
         // }

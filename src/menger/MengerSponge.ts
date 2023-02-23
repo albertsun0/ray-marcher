@@ -24,31 +24,45 @@ export class MengerSponge implements IMengerSponge {
 
   //cube verticies and trianges adapted from 
   //http://ilkinulas.github.io/development/unity/2016/04/30/cube-mesh-in-unity3d.html
+  //http://www.opengl-tutorial.org/beginners-tutorials/tutorial-4-a-colored-cube/
   cubeVertices: Vec3[] = [
-    new Vec3([0, 0, 0]),
-    new Vec3([1, 0, 0]),
-    new Vec3([1, 1, 0]),
-    new Vec3([0, 1, 0]),
-    new Vec3([0, 1, 1]),
-    new Vec3([1, 1, 1]),
-    new Vec3([1, 0, 1]),
-    new Vec3([0, 0, 1]),
-  ];
-
-  cubeTraingles: number[] = [
-    0, 2, 1, //face front
-    0, 3, 2,
-    2, 3, 4, //face top
-    2, 4, 5,
-    1, 2, 5, //face right
-    1, 5, 6,
-    0, 7, 4, //face left
-    0, 4, 3,
-    5, 4, 7, //face back
-    5, 7, 6,
-    0, 6, 7, //face bottom
-    0, 1, 6
-  ];
+    new Vec3([-1.0,-1.0,-1.0]), // triangle 1 : begin
+    new Vec3([-1.0,-1.0, 1.0]),
+    new Vec3([-1.0, 1.0, 1.0]), // triangle 1 : end
+    new Vec3([1.0, 1.0,-1.0,]), // triangle 2 : begin
+    new Vec3([-1.0,-1.0,-1.0]),
+    new Vec3([-1.0, 1.0,-1.0]), // triangle 2 : end
+    new Vec3([1.0,-1.0, 1.0,]),
+    new Vec3([-1.0,-1.0,-1.0]),
+    new Vec3([1.0,-1.0,-1.0,]),
+    new Vec3([1.0, 1.0,-1.0,]),
+    new Vec3([1.0,-1.0,-1.0,]),
+    new Vec3([-1.0,-1.0,-1.0]),
+    new Vec3([-1.0,-1.0,-1.0]),
+    new Vec3([-1.0, 1.0, 1.0]),
+    new Vec3([-1.0, 1.0,-1.0]),
+    new Vec3([1.0,-1.0, 1.0,]),
+    new Vec3([-1.0,-1.0, 1.0]),
+    new Vec3([-1.0,-1.0,-1.0]),
+    new Vec3([-1.0, 1.0, 1.0]),
+    new Vec3([-1.0,-1.0, 1.0]),
+    new Vec3([1.0,-1.0, 1.0,]),
+    new Vec3([1.0, 1.0, 1.0,]),
+    new Vec3([1.0,-1.0,-1.0,]),
+    new Vec3([1.0, 1.0,-1.0,]),
+    new Vec3([1.0,-1.0,-1.0,]),
+    new Vec3([1.0, 1.0, 1.0,]),
+    new Vec3([1.0,-1.0, 1.0,]),
+    new Vec3([1.0, 1.0, 1.0,]),
+    new Vec3([1.0, 1.0,-1.0,]),
+    new Vec3([-1.0, 1.0,-1.0]),
+    new Vec3([1.0, 1.0, 1.0,]),
+    new Vec3([-1.0, 1.0,-1.0]),
+    new Vec3([-1.0, 1.0, 1.0]),
+    new Vec3([1.0, 1.0, 1.0,]),
+    new Vec3([-1.0, 1.0, 1.0]),
+    new Vec3([1.0,-1.0, 1.0])
+];
 
   //index of squares to remove from cube
   removeIndex:number[] = [4,10,12,13,14,16,22];
@@ -85,18 +99,17 @@ export class MengerSponge implements IMengerSponge {
   // index finger is +y / up
   // middle finger pointing forwards is +z / towards you / backwards
   private drawCube(start:number[], width:number){
-      let verticiesix = this.vertices.length/4;
+      let verticesix = this.vertices.length/4;
       //push all 8 vertices with offset
-      for(let i = 0; i < 8; i++){
+      for(let i = 0; i < this.cubeVertices.length; i++){
         this.vertices.push(this.cubeVertices[i].x * width + start[0], 
                           this.cubeVertices[i].y * width + start[1], 
                           this.cubeVertices[i].z * width + start[2], 
                           1);
       }
       //push all triangles
-      for(let i = 0; i < 12 * 3; i++){
-        this.indices.push(this.cubeTraingles[i] + verticiesix);
-        //set normals
+      for(let i = 0; i < 12*3; i++){
+        this.indices.push(verticesix + i);
       }
 
       //normals, not sure if correct
