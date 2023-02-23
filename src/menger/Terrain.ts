@@ -20,7 +20,7 @@ export class Terrain implements ITerrain {
 
   NoiseGrid: number[][] = [];
 
-  nodes:number = this.size/2;
+  nodes:number = this.size;
 
   starty:number = -3;
 

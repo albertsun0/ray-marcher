@@ -155,9 +155,14 @@ export let terrainFSText = `
         vec4 l = normalize(lightDir) * -1.0;
         l.y = l.y * -1.0;
         float diffuse = max(dot(n,l),0.0);
-        
-        if(texCoord.y > -1.0){
+        if(texCoord.y > -0.5){
             gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+        }
+        else if(texCoord.y > -1.0){
+            gl_FragColor = vec4(0.9, 0.9, 0.9, 1.0);
+        }
+        else if(texCoord.y < -6.0){
+            gl_FragColor = vec4(0.3, 0.9, 0.4, 1.0);
         }
         else if(texCoord.y < -4.0){
             gl_FragColor = vec4(0.3, 0.7, 0.4, 1.0);
