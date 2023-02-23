@@ -95,8 +95,6 @@ export class MengerSponge implements IMengerSponge {
     this.indices = [];
     this.normals = [];
     this.gen([-0.5,-0.5,-0.5], 1, level);
-    console.log(this.indices);
-    console.log(this.vertices);
     this.dirty = true;
   }
   
