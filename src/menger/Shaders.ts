@@ -36,7 +36,7 @@ export let defaultFSText = `
     void main () {
         vec4 n = normalize(normal);
         vec4 l = normalize(lightDir);
-        float diffuse = max(dot(n,l), 0.0);
+        float diffuse = abs(dot(n,l));
         
         if(abs(normal.z) == 1.0){
             gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
@@ -47,9 +47,9 @@ export let defaultFSText = `
         else{
             gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
         }
-        // gl_FragColor.x *= diffuse;
-        // gl_FragColor.y *= diffuse;
-        // gl_FragColor.z *= diffuse;
+        gl_FragColor.x *= diffuse;
+        gl_FragColor.y *= diffuse;
+        gl_FragColor.z *= diffuse;
     }
 `;
 
@@ -94,7 +94,7 @@ export let floorFSText = `
     void main () {
         vec4 n = normalize(normal);
         vec4 l = normalize(lightDir);
-        float diffuse = max(dot(n,l), 0.0);
+        float diffuse = abs(dot(n,l));
 
         float a = floor(texCoord.x/5.0);
         float b = floor(texCoord.z/5.0);
