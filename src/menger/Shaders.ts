@@ -51,36 +51,43 @@ export let defaultFSText = `
         return length(p) - r;
     }
 
-    float cubeSDF(vec3 p) {
-        // If d.x < 0, then -1 < p.x < 1, and same logic applies to p.y, p.z
-        // So if all components of d are negative, then p is inside the unit cube
-        vec3 d = abs(p) - vec3(1.0, 1.0, 1.0);
-        
-        // Assuming p is inside the cube, how far is it from the surface?
-        // Result will be negative or zero.
-        float insideDistance = min(max(d.x, max(d.y, d.z)), 0.0);
-        
-        // Assuming p is outside the cube, how far is it from the surface?
-        // Result will be positive or zero.
-        float outsideDistance = length(max(d, 0.0));
-        
-        return insideDistance + outsideDistance;
+    //t = {initial radius, revolving radius}
+    float torusSDF( vec3 p, vec2 t )
+    {
+        return length(vec2(length(p.xz)-t.x,p.y))-t.y;
+    }
+
+    //function to generate rotation matrix given an angle
+    mat2 Rot(float a){
+        float s = sin(a);
+        float c = cos(a);
+        return mat2(c, -s, s, c);
     }
 
     float GetDist(vec3 p) 
     {
-        vec4 s = vec4(0,1,6,1); //Sphere xyz is position w is radius
+        //vec4 s = vec4(0,1,6,1); //Sphere xyz is position w is radius
         float planeDist  = p.y;
-        //float displacement = sin(5.0 * p.x) * sin(5.0 * p.y) * sin(5.0 * p.z) * 0.1;
-        float sphereDist = length(p-s.xyz) - s.w;
-        float d = min(sphereDist,planeDist);
+
+        //float sphereDist = length(p-s.xyz) - s.w;
         
-        if(sphereDist < planeDist){
-            lastHitColor = vec3(1,0,1);
-        }
-        else{
-            lastHitColor = vec3(1,1,1);
-        }
+        vec3 torusPos = p + vec3(0,-1,-2);
+        //rotate torus
+        torusPos.xy *= Rot(u_time);
+        torusPos.yz *= Rot(u_time);
+        float torusDist = torusSDF(torusPos, vec2(0.5,0.1));
+
+        vec3 spherePos = p + vec3(0,-1,-2);
+        float sphereDist = sphereSDF(spherePos, 0.5);
+
+        float d = max(torusDist,sphereDist);
+
+        // if(sphereDist < planeDist){
+        //     lastHitColor = vec3(1,0,1);
+        // }
+        // else{
+        //     lastHitColor = vec3(1,1,1);
+        // }
         return d;
     }
     
