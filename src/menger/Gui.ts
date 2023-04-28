@@ -2,6 +2,7 @@ import { Camera } from "../lib/webglutils/Camera.js";
 import { CanvasAnimation } from "../lib/webglutils/CanvasAnimation.js";
 import { MengerSponge } from "./MengerSponge.js";
 import { Mat4, Vec3 } from "../lib/TSM.js";
+
 /**
  * Might be useful for designing any animation GUI
  */
@@ -125,19 +126,9 @@ export class GUI implements IGUI {
    * @param mouse
    */
   public drag(mouse: MouseEvent): void {
-    if(this.dragging){
-      let curX:number = mouse.screenX;
-      let curY:number = mouse.screenY;
-      let dx:number = mouse.screenX - this.prevX;
-      let dy:number = mouse.screenY - this.prevY;
-      console.log(dx);
-      console.log(dy);
-      let t:Vec3 = this.camera.pos().add(this.camera.forward());
-      this.camera.rotate(new Vec3([dy, -dx,0.0]), GUI.rotationSpeed);
-      //this.camera.rotate(new Vec3([1.0,0.0,0.0]), dy * GUI.rotationSpeed);
-      this.prevX = curX;
-      this.prevY = curY;
-    }
+	  
+	  // TODO: Your code here for left and right mouse drag
+	  
   }
 
   /**
@@ -165,70 +156,57 @@ export class GUI implements IGUI {
 
 	// TOOD: Your code for key handling
 
-
     switch (key.code) {
       case "KeyW": {
-        console.log("w")
-        let temp: Vec3 = this.camera.pos().add(this.camera.forward().scale(-GUI.zoomSpeed));
-        this.camera.setPos(temp);
+
         break;
       }
       case "KeyA": {
-        let temp: Vec3 = this.camera.pos().add(this.camera.right().scale(-GUI.panSpeed));
-        this.camera.setPos(temp);
+
         break;
       }
       case "KeyS": {
-        let temp: Vec3 = this.camera.pos().add(this.camera.forward().scale(GUI.zoomSpeed));
-        this.camera.setPos(temp);
+
         break;
       }
       case "KeyD": {
-        console.log("d");
-        let temp: Vec3 = this.camera.pos().add(this.camera.right().scale(GUI.panSpeed));
-        this.camera.setPos(temp); 
+
         break;
       }
       case "KeyR": {
-        this.camera.rotate(new Vec3([0.0,1.0,0.0]), GUI.rotationSpeed, new Vec3([0.0,0.0,0.0]));
+
         break;
       }
       case "ArrowLeft": {
-        this.camera.rotate(this.camera.forward(), GUI.rollSpeed, this.camera.pos())
+
         break;
       }
       case "ArrowRight": {
-        this.camera.rotate(this.camera.forward(), -GUI.rollSpeed, this.camera.pos())
+
         break;
       }
       case "ArrowUp": {
-        // let temp: Vec3 = this.camera.pos().add(this.camera.up().scale(GUI.panSpeed));
-        let temp: Vec3 = this.camera.pos().add(this.camera.up().scale(GUI.zoomSpeed));
-        this.camera.setPos(temp);
-        // this.camera.setPos(temp);
+
         break;
       }
       case "ArrowDown": {
-        // let temp: Vec3 = this.camera.pos().add(this.camera.up().scale(-GUI.panSpeed));
-        // this.camera.setPos(temp);
-        let temp: Vec3 = this.camera.pos().add(this.camera.up().scale(-GUI.zoomSpeed));
-        this.camera.setPos(temp);
+
         break;
       }
       case "Digit1": {
-        this.sponge.setLevel(1);
+
         break;
       }
       case "Digit2": {
-        this.sponge.setLevel(2);
+
         break;
       }
       case "Digit3": {
-        this.sponge.setLevel(3);
+
         break;
       }
       case "Digit4": {
-        this.sponge.setLevel(4);
+
         break;
       }
       default: {
