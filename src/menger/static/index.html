@@ -6,11 +6,25 @@
     <title>WebGL - Menger</title>
   </head>
   <body>
-    <canvas id="glCanvas" class="card" width="800" height="800">
-      Your browser does not support HTML5 </canvas
-    ><br />
-<script type="module" src="./index.js"></script>
-
-    <br />
+    <div style="flex-direction: row; display: flex; padding: 10px; width: 100%;">
+      <div>
+        <canvas id="glCanvas" class="card" width="800" height="800">
+        Your browser does not support HTML5 </canvas
+      >
+      </div>
+      
+      <div style="padding: 20px; width: 100%;">
+        <h3>Ray Marcher Demo</h3>
+        <p>Press a number to select a scene</p>
+        <p>1. Subtracting Primitives Demo</p>
+        <p>2. Smooth Union of Primitives</p>
+        <p>3. Smooth Interpolating Between Primitives </p>
+        <p>4. Cool Scene</p>
+        <p>5. Cool Scene</p>
+      </div>
+    </div>
+    
+    <script type="module" src="./index.js"></script>
+    
   </body>
 </html>

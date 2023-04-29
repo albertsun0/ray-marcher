@@ -25,11 +25,9 @@ html {
 
 body {
     height: 100%;
-    display: grid;
-    grid-template-rows: 1fr;
-    grid-column-gap: var(--margins);
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas: "canvas tests";
+    width: 100%;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: hidden;
 }
 
 .card {

@@ -45,6 +45,7 @@ export class MengerAnimation extends CanvasAnimation {
   private mengerProjUniformLocation: WebGLUniformLocation = -1;
   private mengerLightUniformLocation: WebGLUniformLocation = -1;
   private mengerTimeUniformLocation: WebGLUniformLocation = -1;
+  private mengerSceneUniformLocation: WebGLUniformLocation = -1;
   /* Global Rendering Info */
   private lightPosition: Vec4 = new Vec4();
   private backgroundColor: Vec4 = new Vec4();
@@ -175,6 +176,10 @@ export class MengerAnimation extends CanvasAnimation {
       this.mengerProgram,
       "time"
     ) as WebGLUniformLocation;
+    this.mengerSceneUniformLocation = gl.getUniformLocation(
+      this.mengerProgram,
+      "scene"
+    ) as WebGLUniformLocation;
     /* Bind uniforms */
     gl.uniformMatrix4fv(
       this.mengerWorldUniformLocation,
@@ -193,6 +198,7 @@ export class MengerAnimation extends CanvasAnimation {
     );
     gl.uniform4fv(this.mengerLightUniformLocation, this.lightPosition.xyzw);
     gl.uniform1f(this.mengerTimeUniformLocation, performance.now());
+    gl.uniform1f(this.mengerSceneUniformLocation, this.gui.selectedScene);
   }
 
   /**
@@ -282,6 +288,7 @@ export class MengerAnimation extends CanvasAnimation {
       new Float32Array(this.gui.projMatrix().all())
     );
     gl.uniform1f(this.mengerTimeUniformLocation, performance.now()/1000);
+    gl.uniform1f(this.mengerSceneUniformLocation, this.gui.selectedScene);
 	
 	console.log("Drawing ", this.sponge.indicesFlat().length, " triangles");
 

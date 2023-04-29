@@ -9,6 +9,7 @@ export let defaultVSText = `
     varying vec4 normal;   
     varying vec3 pos;
     varying float u_time;
+    varying float u_scene;
 
     uniform vec4 lightPosition;
     uniform mat4 mWorld;
@@ -16,6 +17,7 @@ export let defaultVSText = `
 	uniform mat4 mProj;
 
     uniform float time;
+    uniform float scene;
 
     void main () {
         u_time = time;
@@ -24,7 +26,7 @@ export let defaultVSText = `
         pos = vertPosition;
         //  Compute light direction (world coordinates)
         lightDir = lightPosition - vec4(vertPosition, 1.0);
-		
+		u_scene = scene;
         //  Pass along the vertex normal (world coordinates)
         normal = aNorm;
     }
@@ -37,11 +39,12 @@ export let defaultFSText = `
  
 	varying vec3 pos;
     varying float u_time;
-    
+    varying float u_scene;
+
     #define PI 3.1415925359
     #define TWO_PI 6.2831852
     #define MAX_STEPS 100 // Max steps
-    #define MAX_DIST 1000. // Max distance
+    #define MAX_DIST 40. // Max distance
     #define SURF_DIST .01 // Surface distance for intersection
     
     vec3 hitColor = vec3(1,1,1);
@@ -63,16 +66,65 @@ export let defaultFSText = `
         float c = cos(a);
         return mat2(c, -s, s, c);
     }
+
+    //intersection/subtracting primitives
+    float Scene1(vec3 p){
+        float planeDist = p.y;
+        vec3 sphere1Pos = p + vec3(0.2,-1,-2.8);
+        vec3 sphere2Pos = p + vec3(-0.2,-1,-3);
+        float sphere1Dist = sphereSDF(sphere1Pos, 0.5);
+        float sphere2Dist = sphereSDF(sphere2Pos, 0.5);
+
+        float spheres = max(-sphere1Dist,sphere2Dist);
+
+        return min(spheres,planeDist);
+    }
+
+    float smin(float a, float b, float k){
+        float h = clamp(0.5 + 0.5 * (b-a)/k, 0.0, 1.0);
+        return mix(b,a,h) - k * h * (1.0 - h);
+    }
+
+    //smoothly interpolating unions
+    float Scene2(vec3 p){
+        float planeDist = p.y;
+        vec3 sphere1Pos = p + vec3(0.2 + sin(u_time) * 0.4,-1,-2.8);
+        vec3 sphere2Pos = p + vec3(-0.2 - sin(u_time) * 0.4,-1,-3);
+        float sphere1Dist = sphereSDF(sphere1Pos, 0.5);
+        float sphere2Dist = sphereSDF(sphere2Pos, 0.5);
+
+        float spheres = smin(sphere1Dist,sphere2Dist, 0.1);
+
+        return min(spheres,planeDist);
+    }
+
+    //smoothly interpolating between primitives
+    float Scene3(vec3 p){
+        float planeDist = p.y;
+        vec3 spherePos = p + vec3(0.2 + sin(u_time) * 0.4,-1,-2.8);
+        vec3 torusPos = p + vec3(0,-1,-2);
+        torusPos.xy *= Rot(u_time);
+        torusPos.yz *= Rot(u_time);
+        float sphereDist = sphereSDF(spherePos, 0.5);
+        float torusDist = torusSDF(torusPos, vec2(0.5,0.1));
+
+        float d = mix(sphereDist,torusDist, sin(u_time) * 0.5 + 0.5);
+
+        return min(d,planeDist);
+    }
+
     float getPlaneOffset(vec3 p){
         p *= 5.0;
+        p.z-=u_time;
         return abs(dot(sin(p), cos(p.yzx))) * 0.1;
     }
     float BallGyroid(vec3 p) {
         p *=10.;
-        return abs(0.7*dot(sin(p), cos(p.yzx))/10.)-0.1;
+        return abs(0.7*dot(sin(p), cos(p.yzx))/10.)-0.08;
     }
-    float GetDist(vec3 p) 
-    {
+
+    //cool scene
+    float Scene4(vec3 p){
         //vec4 s = vec4(0,1,6,1); //Sphere xyz is position w is radius
         float planeDist  = p.y + getPlaneOffset(p);
         vec3 torusPos = p + vec3(0,-1,-2);
@@ -89,13 +141,34 @@ export let defaultFSText = `
 
         float d = min(torusDist+bg,planeDist);
 
-        // if(sphereDist < planeDist){
-        //     lastHitColor = vec3(1,0,1);
-        // }
-        // else{
-        //     lastHitColor = vec3(1,1,1);
-        // }
+        if(torusDist+bg < planeDist){
+            lastHitColor = vec3(0.8,0.8,0.6);
+        }
+        else{
+            lastHitColor = vec3(1,1,1);
+        }
         return d;
+    }
+
+    float Scene5(vec3 p){
+        return 0.0;
+    }
+    float GetDist(vec3 p) 
+    {
+
+        if(u_scene == 2.0){
+            return Scene2(p);
+        }
+        if(u_scene == 3.0){
+            return Scene3(p);
+        }
+        if(u_scene == 4.0){
+            return Scene4(p);
+        }
+        if(u_scene == 5.0){
+            return Scene5(p);
+        }
+        return Scene1(p);
     }
     
     float RayMarch(vec3 origin, vec3 direction) 
@@ -136,7 +209,6 @@ export let defaultFSText = `
         vec3 lightPos = vec3(5.*sin(u_time),5.,5.0*cos(u_time)); // rotating light pos
         vec3 l = normalize(lightPos-p); // Light Vector
         vec3 n = GetNormal(p); // Normal Vector
-    
         float dif = dot(n,l); // Diffuse light
         dif = clamp(dif,0.,1.); // Clamp so it doesnt go below 0
     
@@ -144,9 +216,8 @@ export let defaultFSText = `
         float d = RayMarch(p+n*SURF_DIST*2., l); 
         
         if(d < length(lightPos-p)){
-            dif *= .1;
-        } 
-    
+            dif *= .3;
+        }
         return dif;
     }
     
@@ -160,7 +231,7 @@ export let defaultFSText = `
     
         float d = RayMarch(ro,rd); // Distance
         
-        vec3 color = vec3(0.0,0.0,0.0);
+        vec3 color = vec3(0.6,0.6,0.9);
 
         if(d <= MAX_DIST){
             vec3 p = ro + rd * d;
@@ -169,6 +240,7 @@ export let defaultFSText = `
         }
         
         // Set the output color
+        
         gl_FragColor = vec4(color,1.0);
     }
 

@@ -36,6 +36,7 @@ export class GUI implements IGUI {
 
   private sponge: MengerSponge;
   private animation: CanvasAnimation;
+  public selectedScene: number;
 
   /**
    *
@@ -48,6 +49,7 @@ export class GUI implements IGUI {
     animation: CanvasAnimation,
     sponge: MengerSponge
   ) {
+    this.selectedScene = 1;
     this.height = canvas.height;
     this.width = canvas.width;
     this.prevX = 0;
@@ -194,19 +196,23 @@ export class GUI implements IGUI {
         break;
       }
       case "Digit1": {
-
+        this.selectedScene = 1;
         break;
       }
       case "Digit2": {
-
+        this.selectedScene = 2;
         break;
       }
       case "Digit3": {
-
+        this.selectedScene = 3;
         break;
       }
       case "Digit4": {
-
+        this.selectedScene = 4;
+        break;
+      }
+      case "Digit5": {
+        this.selectedScene = 5;
         break;
       }
       default: {
