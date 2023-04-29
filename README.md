@@ -9,7 +9,7 @@ As such you will have to ensure you have npm and the proper dependencies install
 
 Installing Typescript:
 npm install -g typescript
-npm install -g http-server
+npm install -g http-server                                                      
 
 In order to compile the code you will have to run the make-menger.py script from the project root folder.
 

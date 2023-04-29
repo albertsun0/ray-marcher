@@ -41,8 +41,6 @@ export let defaultFSText = `
     varying float u_time;
     varying float u_scene;
 
-    #define PI 3.1415925359
-    #define TWO_PI 6.2831852
     #define MAX_STEPS 100 // Max steps
     #define MAX_DIST 40. // Max distance
     #define SURF_DIST .01 // Surface distance for intersection
@@ -165,7 +163,7 @@ export let defaultFSText = `
         float d = min(torusDist+bg*7.,planeDist);
 
         if(torusDist+bg*7. < planeDist){
-            lastHitColor = vec3(0.8,0.8,0.6);
+            lastHitColor = vec3(1.0,0.3,0.6);
         }
         else{
             lastHitColor = vec3(1,1,1);
@@ -192,10 +190,10 @@ export let defaultFSText = `
     
     float RayMarch(vec3 origin, vec3 direction) 
     {
-        float marchDist = 0.0; //Distane Origin
+        float marchDist = 0.0; //current distance traveled
         for(int i=0; i<MAX_STEPS; i++)
         {
-            vec3 p = origin + direction * marchDist;
+            vec3 p = origin + direction * marchDist; //current point
             float ds = GetDist(p);
             marchDist += ds;
             //if ray goes off into space, or hits object, return
@@ -232,6 +230,8 @@ export let defaultFSText = `
         dif = clamp(dif,0.,1.); // Clamp so it doesnt go below 0
     
         // Shadows
+        // Shoot a ray towards the light and check for intersection
+        // Offset so no self intersect
         float d = RayMarch(p+n*SURF_DIST*2., l); 
         
         if(d < length(lightPos-p)){
