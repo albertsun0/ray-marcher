@@ -42,7 +42,7 @@ export let defaultFSText = `
     #define TWO_PI 6.2831852
     #define MAX_STEPS 100 // Max steps
     #define MAX_DIST 1000. // Max distance
-    #define SURF_DIST .001 // Surface distance for intersection
+    #define SURF_DIST .01 // Surface distance for intersection
     
     vec3 hitColor = vec3(1,1,1);
     vec3 lastHitColor = vec3(1,1,1);
@@ -63,13 +63,14 @@ export let defaultFSText = `
         float c = cos(a);
         return mat2(c, -s, s, c);
     }
-
+    float getPlaneOffset(vec3 p){
+        p *= 5.0;
+        return abs(dot(sin(p), cos(p.yzx))) * 0.1;
+    }
     float GetDist(vec3 p) 
     {
         //vec4 s = vec4(0,1,6,1); //Sphere xyz is position w is radius
-        float planeDist  = p.y;
-
-        //float sphereDist = length(p-s.xyz) - s.w;
+        float planeDist  = p.y + getPlaneOffset(p);
         
         vec3 torusPos = p + vec3(0,-1,-2);
         //rotate torus
@@ -80,7 +81,7 @@ export let defaultFSText = `
         vec3 spherePos = p + vec3(0,-1,-2);
         float sphereDist = sphereSDF(spherePos, 0.5);
 
-        float d = max(torusDist,sphereDist);
+        float d = min(torusDist,planeDist);
 
         // if(sphereDist < planeDist){
         //     lastHitColor = vec3(1,0,1);
