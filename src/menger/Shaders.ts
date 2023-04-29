@@ -99,7 +99,7 @@ export let defaultFSText = `
     //smoothly interpolating between primitives
     float Scene3(vec3 p){
         float planeDist = p.y;
-        vec3 spherePos = p + vec3(0.2 + sin(u_time) * 0.4,-1,-2.8);
+        vec3 spherePos = p + vec3(0.2,-1,-2.2);
         vec3 torusPos = p + vec3(0,-1,-2);
         torusPos.xy *= Rot(u_time);
         torusPos.yz *= Rot(u_time);
@@ -107,7 +107,12 @@ export let defaultFSText = `
         float torusDist = torusSDF(torusPos, vec2(0.5,0.1));
 
         float d = mix(sphereDist,torusDist, sin(u_time) * 0.5 + 0.5);
-
+        if(d < planeDist){
+            lastHitColor = vec3(0.8,0.8,0.6);
+        }
+        else{
+            lastHitColor = vec3(1,1,1);
+        }
         return min(d,planeDist);
     }
 
