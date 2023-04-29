@@ -151,7 +151,29 @@ export let defaultFSText = `
     }
 
     float Scene5(vec3 p){
-        return 0.0;
+        //vec4 s = vec4(0,1,6,1); //Sphere xyz is position w is radius
+        float planeDist  = p.y + getPlaneOffset(p);
+        vec3 torusPos = p + vec3(0,-1,-2);
+        //rotate torus
+        torusPos.xy *= Rot(u_time);
+        torusPos.yz *= Rot(u_time);
+        float torusDist = torusSDF(torusPos, vec2(0.5,0.1));
+
+        vec3 spherePos = p + vec3(0,-1,-2);
+        float sphereDist = sphereSDF(spherePos, 0.5);
+
+        float bg = BallGyroid(p);
+        // float d = min(bg,planeDist);
+
+        float d = min(torusDist+bg*7.,planeDist);
+
+        if(torusDist+bg*7. < planeDist){
+            lastHitColor = vec3(0.8,0.8,0.6);
+        }
+        else{
+            lastHitColor = vec3(1,1,1);
+        }
+        return d;
     }
     float GetDist(vec3 p) 
     {
