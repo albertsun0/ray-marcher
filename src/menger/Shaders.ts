@@ -67,11 +67,14 @@ export let defaultFSText = `
         p *= 5.0;
         return abs(dot(sin(p), cos(p.yzx))) * 0.1;
     }
+    float BallGyroid(vec3 p) {
+        p *=10.;
+        return abs(0.7*dot(sin(p), cos(p.yzx))/10.)-0.1;
+    }
     float GetDist(vec3 p) 
     {
         //vec4 s = vec4(0,1,6,1); //Sphere xyz is position w is radius
         float planeDist  = p.y + getPlaneOffset(p);
-        
         vec3 torusPos = p + vec3(0,-1,-2);
         //rotate torus
         torusPos.xy *= Rot(u_time);
@@ -81,7 +84,10 @@ export let defaultFSText = `
         vec3 spherePos = p + vec3(0,-1,-2);
         float sphereDist = sphereSDF(spherePos, 0.5);
 
-        float d = min(torusDist,planeDist);
+        float bg = BallGyroid(p);
+        // float d = min(bg,planeDist);
+
+        float d = min(torusDist+bg,planeDist);
 
         // if(sphereDist < planeDist){
         //     lastHitColor = vec3(1,0,1);
