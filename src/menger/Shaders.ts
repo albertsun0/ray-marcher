@@ -158,13 +158,10 @@ export let defaultFSText = `
         torusPos.xy *= Rot(u_time);
         torusPos.yz *= Rot(u_time);
         float torusDist = torusSDF(torusPos, vec2(0.5,0.1));
-
         vec3 spherePos = p + vec3(0,-1,-2);
         float sphereDist = sphereSDF(spherePos, 0.5);
 
         float bg = BallGyroid(p);
-        // float d = min(bg,planeDist);
-
         float d = min(torusDist+bg*7.,planeDist);
 
         if(torusDist+bg*7. < planeDist){
